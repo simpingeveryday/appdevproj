@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Beauty - Retrieve vouchers{% endblock %}
+
+{% block content %}
+<h1 class="display-4">Retrieve vouchers</h1>
+<div>
+    {% if count == 0 %}
+    <p>There are no vouchers</p>
+    {% elif count == 1 %}
+    <p>There is 1 vouchers</p>
+    {% else %}
+    <p>There are {{ count }} vouchers</p>
+    {% endif %}
+</div>
+<div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>voucher name</th>
+            <th>category</th>
+            <th>profile pic</th>
+            <th>duration till</th>
+            <th>remarks</th>
+            <th>points</th>
+            <th>quantity</th>
+            <th>Time Updated</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for voucher in voucher_list %}
+        <tr>
+            <td>{{voucher.name}}</td>
+            <td>{{voucher.category}}</td>
+            <td><img id="imgProfile" src="/static/images/{{ voucher.profile_image | default('user.png') }}" alt="{{ voucher.name }}"
+             width="120" height="120" style="object-fit:cover" class="rounded-circle"/></td>
+            <td>{{voucher.get_duration_str()}}</td>
+            <td>{{voucher.remarks}}</td>
+            <td>{{voucher.points}}</td>
+            <td>{{voucher.quantity}}</td>
+            <td>{{voucher.get_time_updated_str()}}</td>
+            <td><a href="/updateUser/{{voucher.id}}" class="btn btn-warning">Update</a></td>
+            <td>
+                <form action="/deleteUser/{{voucher.id}}" method="POST">
+                    <!-- Button to Open the Modal -->
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#myModal_{{voucher.id}}">
+                        Delete
+                    </button>
+
+                    <!-- The Modal -->
+                    <div class="modal" id="myModal_{{voucher.id}}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Delete Confirmation</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                    Are you sure to delete {{voucher.name}}?
+                                </div>
+
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+                                    <input type="submit" value="Delete" class="btn btn-danger">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
